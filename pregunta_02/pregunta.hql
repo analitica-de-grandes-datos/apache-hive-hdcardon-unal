@@ -33,7 +33,7 @@ AS
     FROM
         datos
 ORDER BY
-    letra,numero;
+    letra ASC,numero ASC,fecha ASC;
 
 INSERT OVERWRITE LOCAL DIRECTORY './output'
 ROW FORMAT DELIMITED FIELDS TERMINATED BY ','
