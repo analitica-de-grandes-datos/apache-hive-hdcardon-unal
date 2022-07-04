@@ -30,3 +30,13 @@ LOAD DATA LOCAL INPATH 'data.tsv' INTO TABLE t0;
     >>> Escriba su respuesta a partir de este punto <<<
 */
 
+DROP TABLE IF EXISTS result;
+
+CREATE TABLE result AS 
+SELECT key,COUNT(key) FROM t0
+LATERAL VIEW EXPLODE(c3) tbl AS key,value
+GROUP BY key;
+
+INSERT OVERWRITE LOCAL DIRECTORY './output'
+ROW FORMAT DELIMITED FIELDS TERMINATED BY ','
+SELECT * FROM result;

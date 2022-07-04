@@ -44,3 +44,19 @@ LOAD DATA LOCAL INPATH 'data1.csv' INTO TABLE tbl1;
 /*
     >>> Escriba su respuesta a partir de este punto <<<
 */
+
+DROP TABLE IF EXISTS words;
+DROP TABLE IF EXISTS words_unique;
+
+CREATE TABLE words (col1 INT, col2 STRING, col3 INT, col4 DATE, col5 STRING, col6 STRING)
+ROW FORMAT DELIMITED FIELDS TERMINATED BY ',';
+
+LOAD DATA LOCAL INPATH 'data0.csv' OVERWRITE INTO TABLE words;
+
+CREATE TABLE words_unique
+AS SELECT DISTINCT word FROM (SELECT explode(split(col5, ':')) AS word FROM words) w
+ORDER BY word;
+
+INSERT OVERWRITE LOCAL DIRECTORY './output'
+ROW FORMAT DELIMITED FIELDS TERMINATED BY ','
+SELECT * FROM words_unique;
