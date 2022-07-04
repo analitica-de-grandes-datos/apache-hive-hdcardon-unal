@@ -45,3 +45,13 @@ LOAD DATA LOCAL INPATH 'data1.csv' INTO TABLE tbl1;
     >>> Escriba su respuesta a partir de este punto <<<
 */
 
+DROP TABLE IF EXISTS result;
+
+CREATE TABLE result AS 
+SELECT YEAR(c4), word, COUNT(word) FROM tbl0
+LATERAL VIEW explode(c5) tbl AS word
+GROUP BY YEAR(C4),word;
+
+INSERT OVERWRITE LOCAL DIRECTORY './output'
+ROW FORMAT DELIMITED FIELDS TERMINATED BY ','
+SELECT * FROM result;
